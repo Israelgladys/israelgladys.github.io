@@ -63,3 +63,5 @@ body.dialog-open{overflow:hidden}
 .environment-block{margin-top:20px}
 .description .environment-label{margin:0 0 3px;font-size:12px;font-weight:600;line-height:1.4}
 .environment-block .environment-table{margin-bottom:0}
+.project-meta{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.project-stars{flex:none;white-space:nowrap;font-size:12px;line-height:1.8;font-weight:500;color:var(--muted);font-variant-numeric:tabular-nums}

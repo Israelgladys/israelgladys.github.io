@@ -39,6 +39,38 @@
     node.rel = 'noopener noreferrer';
     return node;
   };
+  const registrationOrder = new Map(data.map((p, index) => [p.url, index]));
+  const starCounts = new Map();
+  const starLabel = count => '⭐︎' + (count >= 1000000 ? `${Number((count / 1000000).toFixed(1))}m` : count >= 1000 ? `${Number((count / 1000).toFixed(1))}k` : count);
+  function updateStarLabels() {
+    document.querySelectorAll('.project-stars').forEach(node => {
+      const info = starCounts.get(node.dataset.repository);
+      node.textContent = info ? starLabel(info.count) : '⭐︎—';
+      node.title = info ? `${info.count.toLocaleString('ja-JP')} stars（${info.source}）` : 'スター数を取得できませんでした';
+      node.setAttribute('aria-label', node.title);
+    });
+  }
+  async function loadStars(p) {
+    const repo = new URL(p.url).pathname.slice(1);
+    const key = `projects-stars:${repo}`;
+    let cached;
+    try { cached = JSON.parse(localStorage.getItem(key)); } catch (_) {}
+    const valid = cached && Number.isSafeInteger(cached.count) && cached.count >= 0 && Number.isFinite(cached.time) && cached.time <= Date.now();
+    if (valid) starCounts.set(repo, {count: cached.count, source: `取得 ${new Date(cached.time).toLocaleString('ja-JP')}`});
+    else if (Number.isSafeInteger(p.stars)) starCounts.set(repo, {count: p.stars, source: `登録データ・${p.starsCheckedAt || '確認日不明'}取得`});
+    updateStarLabels();
+    if (valid && Date.now() - cached.time < 3 * 24 * 60 * 60 * 1000) return;
+    try {
+      const response = await fetch(`https://api.github.com/repos/${repo}`, {headers: {Accept: 'application/vnd.github+json'}, signal: AbortSignal.timeout(8000), credentials: 'omit'});
+      if (!response.ok) return;
+      const payload = await response.json();
+      if (!Number.isSafeInteger(payload.stargazers_count) || payload.stargazers_count < 0) return;
+      const value = {count: payload.stargazers_count, time: Date.now()};
+      starCounts.set(repo, {count: value.count, source: `取得 ${new Date(value.time).toLocaleString('ja-JP')}`});
+      try { localStorage.setItem(key, JSON.stringify(value)); } catch (_) {}
+      updateStarLabels();
+    } catch (_) { /* Keep the last known count if the API is unavailable. */ }
+  }
   const dialog = element('dialog', 'project-dialog', '');
   dialog.setAttribute('aria-labelledby', 'project-dialog-title');
   const dialogHeader = element('div', 'dialog-header', '');
@@ -74,19 +106,25 @@
   const state = new URLSearchParams(location.search);
   search.value = state.get('q') || '';
   if ([...category.options].some(o => o.value === state.get('category'))) category.value = state.get('category');
-  if (state.get('sort') === 'name') sort.value = 'name';
+  if (['name', 'stars'].includes(state.get('sort'))) sort.value = state.get('sort');
   function render() {
     const query = search.value.normalize('NFKC').toLocaleLowerCase().trim();
     const terms = query.split(/\s+/).filter(Boolean);
     const filtered = data.filter(p => (!category.value || p.category === category.value) && terms.every(term => [p.name,p.url,p.summary,p.description,p.category,...p.tags].join(' ').normalize('NFKC').toLocaleLowerCase().includes(term)));
-    filtered.sort(sort.value === 'name' ? (a,b) => a.name.localeCompare(b.name,'ja') : (a,b) => b.addedAt.localeCompare(a.addedAt) || a.name.localeCompare(b.name,'ja'));
+    const newestFirst = (a,b) => b.addedAt.localeCompare(a.addedAt) || registrationOrder.get(b.url) - registrationOrder.get(a.url);
+    const starsOf = p => starCounts.get(new URL(p.url).pathname.slice(1))?.count ?? p.stars ?? -1;
+    filtered.sort(sort.value === 'name' ? (a,b) => a.name.localeCompare(b.name,'ja') : sort.value === 'stars' ? (a,b) => starsOf(b) - starsOf(a) || newestFirst(a,b) : newestFirst);
     cards.replaceChildren();
     filtered.forEach(p => {
       const card = element('details', 'project-item', '');
       const heading = element('summary', 'project-heading', '');
       if (cards.classList.contains('tile-view')) heading.setAttribute('aria-haspopup', 'dialog');
       const overview = element('div', 'project-overview', '');
-      overview.append(element('span','category',p.category), element('h2','',p.name), element('p','summary',p.summary));
+      const meta = element('div', 'project-meta', '');
+      const stars = element('span', 'project-stars', '⭐︎—');
+      stars.dataset.repository = new URL(p.url).pathname.slice(1);
+      meta.append(element('span','category',p.category), stars);
+      overview.append(meta, element('h2','',p.name), element('p','summary',p.summary));
       heading.append(overview, element('span','project-toggle',''));
       const body = element('div', 'project-body', '');
       const description = element('div', 'description', '');
@@ -135,14 +173,16 @@
     empty.hidden = filtered.length > 0;
     document.querySelector('#empty-title').textContent = data.length ? '一致するプロジェクトがない。' : 'コレクションは、ここから。';
     document.querySelector('#empty-text').textContent = data.length ? 'キーワードや分類を変えて検索。' : '気になったプロジェクトを、少しずつ追加していく。';
+    updateStarLabels();
   }
   function update() {
     const params = new URLSearchParams();
     if (search.value.trim()) params.set('q',search.value.trim());
     if (category.value) params.set('category',category.value);
-    if (sort.value === 'name') params.set('sort','name');
+    if (['name', 'stars'].includes(sort.value)) params.set('sort',sort.value);
     try {history.replaceState(null,'',location.pathname + (params.size ? '?' + params : '') + location.hash);} catch (_) {}
     render();
   }
   search.addEventListener('input',update);category.addEventListener('change',update);sort.addEventListener('change',update);render();
+  Promise.all(data.map(loadStars)).then(() => { if (sort.value === 'stars') render(); });
 })();
