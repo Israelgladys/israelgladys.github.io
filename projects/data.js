@@ -60,5 +60,31 @@ window.PROJECTS = [
         "url": "https://github.com/noahdunnagan/mcopt/releases/tag/v0.3.0-alpha.2"
       }
     ]
+  },
+  {
+    "name": "PluginKits — macOS拡張機能管理ツール",
+    "url": "https://github.com/Oil3/PluginKits",
+    "summary": "macOSにインストールされた拡張機能を一覧表示・管理し、Quick Lookの競合や動作不良の解消を支援するツール。",
+    "description": "PluginKitsは、macOSのアプリ・システムに登録された.appex形式の拡張機能を管理するSwift製ツールで、公式READMEはオープンソースと説明しているが具体的なライセンス名は未確認。macOS 13 Ventura以降のApple Silicon・Intel Macに対応し、macOS 14未満ではVentura用の配布版を選ぶ必要があり、公式説明ではシステム権限を要求せずアプリの外向きネットワーク通信を無効化している。拡張機能の識別子・保存場所などを確認して個別に有効化・無効化や登録・解除を行い、Quick Lookで同じファイル形式を扱う拡張機能の競合を検出して使用するものを選べるため、プレビュー不良の原因調査や不要な拡張機能の整理に使える。登録解除の取り消しはアプリ終了までで、操作は拡張機能の動作に影響し、自動整理では重複版の無効化・登録解除・一時バックアップ・ゴミ箱への移動に加えて残す拡張機能の/Applicationsへの移動と再登録も行うため、対象を確認して操作する必要がある。",
+    "category": "macOS",
+    "tags": [
+      "システム管理",
+      "ユーティリティ",
+      "Quick Look",
+      "拡張機能",
+      "Swift"
+    ],
+    "addedAt": "2026-10-10",
+    "checkedAt": "2026-10-10",
+    "sources": [
+      {
+        "label": "公式README",
+        "url": "https://github.com/Oil3/PluginKits/blob/oil3/README.md"
+      },
+      {
+        "label": "公式リリース",
+        "url": "https://github.com/Oil3/PluginKits/releases/tag/pluginkit-v1.0"
+      }
+    ]
   }
 ];
