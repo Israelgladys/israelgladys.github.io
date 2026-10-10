@@ -170,5 +170,51 @@ window.PROJECTS = [
         "url": "https://github.com/krishhgg/Insomnia/blob/main/LICENSE"
       }
     ]
+  },
+  {
+    "name": "ローカルモデル診断書 — ローカルLLMの性能・回答傾向評価ツール",
+    "url": "https://github.com/isichan-ai/local-model-diagnosis",
+    "summary": "ローカルLLMの性能や回答傾向を10の評価軸で測定し、モデルごとの特徴を診断書として可視化するツール。",
+    "description": "ローカルモデル診断書は、手元で動かすLLMの性能と回答傾向を10の軸で評価するPython製のベンチマークツール。モデルの得意・不得意を把握し、用途に合うモデルを比較するための診断書を出力する。\nコーディング、長文読解、文章・プロンプト、画像認識などの能力に加え、正直さ、率直さ、自制心、拒否傾向、規則に従った正答率を測る。結果は漢字5文字と数字5桁の「十文字」、総合点、評価ランクにまとめられる。\nOllama・llama.cpp・LM StudioなどのOpenAI互換APIへ接続し、HTMLとJSONを保存する。HTMLはブラウザからA4のPDFとして印刷でき、Ver 01.06のJSONは公式サイトの比較表にも利用できる。中断した測定は同じコマンドで再開できる。\n評価には大量のトークンを使い、処理時間はモデルの速度に依存する。開発者はローカルモデル専用とし、従量課金APIでの実行を避けるよう案内している。一部の採点には別の小型モデル2本を用いるため、点数はこの診断の問題・採点方法に基づく結果として扱う。\n初回に採点用モデル約5.6GBと採点用サーバーをダウンロードする。公式説明では測定中の回答本文は外部送信せず、指定したサーバーとローカルの採点処理で扱う。Ver 01.05で評価方法が大きく変わり、それ以前の点数とは直接比較できない。リポジトリにライセンスの明示は確認できなかった。",
+    "environment": [
+      {
+        "label": "実行環境",
+        "value": "Python 3.10以降／requests・Pillow・matplotlib。採点用サーバーの自動取得先はWindows x64用で、他OSでの動作は未確認"
+      },
+      {
+        "label": "接続・文脈長",
+        "value": "OpenAI互換APIのローカルLLM環境。コンテキスト長32,768トークン以上が必要"
+      },
+      {
+        "label": "出力・追加取得",
+        "value": "HTML・JSON、ブラウザからPDF印刷。初回に採点用モデル約5.6GBとサーバーを取得"
+      }
+    ],
+    "category": "開発ツール",
+    "tags": [
+      "AI",
+      "ローカルLLM",
+      "ベンチマーク",
+      "性能評価",
+      "Python",
+      "Ollama",
+      "LM Studio"
+    ],
+    "addedAt": "2026-10-10",
+    "checkedAt": "2026-10-10",
+    "sources": [
+      {
+        "label": "公式README",
+        "url": "https://github.com/isichan-ai/local-model-diagnosis/blob/main/README.md"
+      },
+      {
+        "label": "公式採点処理（対応環境・ダウンロード）",
+        "url": "https://github.com/isichan-ai/local-model-diagnosis/blob/main/judges.py"
+      },
+      {
+        "label": "公式診断処理（HTML・JSON出力）",
+        "url": "https://github.com/isichan-ai/local-model-diagnosis/blob/main/%E8%A8%BA%E6%96%AD.py"
+      }
+    ]
   }
 ];
