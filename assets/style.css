@@ -38,3 +38,28 @@
 .tile-view .card-bottom{flex-wrap:wrap}
 @media(max-width:900px){.toolbar{grid-template-columns:minmax(0,1fr) 130px 160px auto}.project-list.tile-view{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:700px){.toolbar{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px}.toolbar>div:first-child{grid-column:1/-1}.view-switch{grid-column:1/-1;justify-self:end;height:36px}.project-list.tile-view{grid-template-columns:1fr}.project-body .description{font-size:14px}}
+
+/* Tile details appear in a centered modal; the list keeps inline disclosure. */
+.tile-view .project-toggle{display:none}
+.tile-view .project-item>.project-body{display:none}
+body.dialog-open{overflow:hidden}
+.project-dialog{width:min(720px,calc(100vw - 40px));max-height:min(780px,calc(100dvh - 48px));margin:auto;padding:0;border:1px solid var(--line);border-radius:12px;background:#fffefa;color:var(--ink);box-shadow:0 24px 80px #10241d33;overflow:hidden}
+.project-dialog[open]{display:flex;flex-direction:column}
+.project-dialog::backdrop{background:rgb(28 42 35 / 32%)}
+.dialog-header{display:flex;align-items:start;justify-content:space-between;gap:20px;padding:24px 28px 20px;border-bottom:1px solid var(--line);flex:none}
+.dialog-header h2{font-size:23px;line-height:1.5;margin:0;overflow-wrap:anywhere}
+.dialog-close{flex:none;width:32px;height:32px;border:0;background:transparent;color:var(--ink);font:inherit;font-size:28px;line-height:1;cursor:pointer}
+.dialog-close:hover{background:#eaf0e8}
+.dialog-close:focus-visible{outline:3px solid var(--green);outline-offset:2px}
+.dialog-content{overflow:auto;scrollbar-gutter:stable;padding:24px 28px;min-height:0;overscroll-behavior:contain}
+.dialog-content>.category{color:var(--green);font-size:11px;font-weight:700}
+.dialog-intro{font-size:14px;font-weight:600;margin:8px 0 22px}
+.dialog-content .project-body{border:0;padding:0}
+@media(max-width:700px){.project-dialog{width:calc(100vw - 28px);max-height:calc(100dvh - 28px)}.dialog-header{padding:18px;gap:12px}.dialog-header h2{font-size:18px}.dialog-content{padding:18px}}
+.environment-table{width:100%;margin:0 0 1.1em;border-collapse:collapse;background:#f7f7f5;font-size:13px;line-height:1.5}
+.environment-table th,.environment-table td{padding:5px 12px;border:1px solid #e7e9e4;text-align:left;vertical-align:top;overflow-wrap:anywhere}
+.environment-table th{width:28%;background:#f0f2ed;font-weight:600}
+@media(max-width:700px){.environment-table th,.environment-table td{padding:5px 9px}.environment-table th{width:30%}}
+.environment-block{margin-top:20px}
+.description .environment-label{margin:0 0 3px;font-size:12px;font-weight:600;line-height:1.4}
+.environment-block .environment-table{margin-bottom:0}

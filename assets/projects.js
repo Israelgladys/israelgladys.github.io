@@ -9,6 +9,12 @@
   const viewButtons = document.querySelectorAll('[data-view]');
   function setView(view) {
     cards.classList.toggle('tile-view', view === 'tile');
+    cards.querySelectorAll('.project-heading').forEach(heading => {
+      if (view === 'tile') {
+        heading.setAttribute('aria-haspopup', 'dialog');
+        heading.parentElement.open = false;
+      } else heading.removeAttribute('aria-haspopup');
+    });
     viewButtons.forEach(button => button.setAttribute('aria-pressed', String(button.dataset.view === view)));
     try { localStorage.setItem('projects-view', view); } catch (_) {}
   }
@@ -33,6 +39,33 @@
     node.rel = 'noopener noreferrer';
     return node;
   };
+  const dialog = element('dialog', 'project-dialog', '');
+  dialog.setAttribute('aria-labelledby', 'project-dialog-title');
+  const dialogHeader = element('div', 'dialog-header', '');
+  const dialogTitle = element('h2', '', '');
+  dialogTitle.id = 'project-dialog-title';
+  const closeButton = element('button', 'dialog-close', '×');
+  closeButton.type = 'button';
+  closeButton.setAttribute('aria-label', '詳細を閉じる');
+  const dialogContent = element('div', 'dialog-content', '');
+  dialogHeader.append(dialogTitle, closeButton);
+  dialog.append(dialogHeader, dialogContent);
+  document.body.append(dialog);
+  closeButton.addEventListener('click', () => dialog.close());
+  dialog.addEventListener('close', () => document.body.classList.remove('dialog-open'));
+  // A click outside the panel closes it; clicks in its padding stay inside.
+  dialog.addEventListener('click', event => {
+    const rect = dialog.getBoundingClientRect();
+    if (event.target === dialog && (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom)) dialog.close();
+  });
+  function openDialog(project, body) {
+    dialogTitle.textContent = project.name;
+    const intro = element('p', 'dialog-intro', project.summary);
+    dialogContent.replaceChildren(element('span', 'category', project.category), intro, body.cloneNode(true));
+    dialog.showModal();
+    dialogContent.scrollTop = 0;
+    document.body.classList.add('dialog-open');
+  }
   [...new Set(data.map(p => p.category))].sort((a,b) => a.localeCompare(b,'ja')).forEach(value => {
     const option = element('option', '', value);
     option.value = value;
@@ -51,6 +84,7 @@
     filtered.forEach(p => {
       const card = element('details', 'project-item', '');
       const heading = element('summary', 'project-heading', '');
+      if (cards.classList.contains('tile-view')) heading.setAttribute('aria-haspopup', 'dialog');
       const overview = element('div', 'project-overview', '');
       overview.append(element('span','category',p.category), element('h2','',p.name), element('p','summary',p.summary));
       heading.append(overview, element('span','project-toggle',''));
@@ -60,7 +94,27 @@
       const paragraphs = p.description.includes('\n')
         ? p.description.split(/\n+/)
         : p.description.match(/[^。]+。|[^。]+$/g) || [];
-      paragraphs.filter(text => text.trim()).forEach(text => description.append(element('p', '', text.trim())));
+      paragraphs.filter(text => text.trim()).forEach(text => {
+        if (text.trim().startsWith('対応環境：') && p.environment?.length) return;
+        description.append(element('p', '', text.trim()));
+      });
+      if (p.environment?.length) {
+          const environment = element('div', 'environment-block', '');
+          environment.append(element('p', 'environment-label', '▼対応環境'));
+          const table = element('table', 'environment-table', '');
+          table.setAttribute('aria-label', '対応環境');
+          const tbody = element('tbody', '', '');
+          p.environment.forEach(row => {
+            const tr = element('tr', '', '');
+            const th = element('th', '', row.label);
+            th.scope = 'row';
+            tr.append(th, element('td', '', row.value));
+            tbody.append(tr);
+          });
+          table.append(tbody);
+          environment.append(table);
+          description.append(environment);
+      }
       body.append(element('span','repo',new URL(p.url).pathname.slice(1)), description);
       const bottom = element('div','card-bottom','');
       bottom.append(link('GitHubで見る ↗',p.url,'external'),element('span','date',`確認 ${p.checkedAt}`));
@@ -70,6 +124,12 @@
       const list = element('ul','','');
       p.sources.forEach(source => {const item = element('li','','');item.append(link(source.label,source.url,''));list.append(item);});
       sources.append(list);body.append(sources);card.append(heading,body);cards.append(card);
+      heading.addEventListener('click', event => {
+        if (cards.classList.contains('tile-view')) {
+          event.preventDefault();
+          openDialog(p, body);
+        }
+      });
     });
     document.querySelector('#count').textContent = `${filtered.length} / ${data.length} PROJECTS`;
     empty.hidden = filtered.length > 0;

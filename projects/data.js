@@ -1,9 +1,19 @@
 window.PROJECTS = [
   {
-    "name": "REA — Reverse Engineer Anything",
+    "name": "REA — AI連携リバースエンジニアリングツール",
     "url": "https://github.com/morluto/rea",
     "summary": "AIエージェントと連携し、アプリや実行ファイルの内部構造・動作を解析できるリバースエンジニアリングツール。",
-    "description": "REAは、ソースコードが公開されていないアプリや実行ファイルの仕組みを調査するためのMITライセンスのツール。Claude CodeやCodexなどのAIエージェントとMCP経由で連携し、JavaScript・Electron製アプリ、Webサイト、ネイティブバイナリなどの内部構造や処理の流れを解析できる。公式事例にはNotionのコピー処理の追跡、Chromeの恐竜ゲーム由来のブラウザ版の加速処理の調査と速度調整機能付きの再現、Windows電卓の「%」ボタンの計算処理の調査と再現があり、解析結果をもとにAIエージェントが類似機能を実装する用途を想定している。REAはAIエージェントに解析手段を提供する仕組みで、ネイティブバイナリの詳細解析にはGhidra・Hopper・IDAのいずれかが必要。",
+    "description": "REAは、AIエージェントと連携し、ソースコードが公開されていないアプリや実行ファイルの内部構造・処理の流れを調査するツール。解析結果をもとに、AIエージェントが類似機能を実装する用途にも使える。\nClaude CodeやCodexなどのAIエージェントとMCP経由で連携し、JavaScript・Electron製アプリ、Webサイト、ネイティブバイナリなどの内部構造や処理の流れを解析できる。\n公式事例にはNotionのコピー処理の追跡、Chromeの恐竜ゲーム由来のブラウザ版の加速処理の調査と速度調整機能付きの再現、Windows電卓の「%」ボタンの計算処理の調査と再現がある。\n対応環境：MCP対応AIエージェント、Node.js・npm\nREAはAIエージェントに解析手段を提供する仕組みで、ネイティブバイナリの詳細解析にはGhidra・Hopper・IDAのいずれかが必要。MITライセンスで公開されている。",
+    "environment": [
+      {
+        "label": "連携",
+        "value": "MCP対応のAIエージェント（Claude Code・Codexなど）"
+      },
+      {
+        "label": "実行環境",
+        "value": "Node.js・npm"
+      }
+    ],
     "category": "開発ツール",
     "tags": [
       "AIエージェント",
@@ -33,10 +43,24 @@ window.PROJECTS = [
     ]
   },
   {
-    "name": "mcopt — Minecraft Optimization for Apple Silicon",
+    "name": "mcopt — Apple Silicon向けMinecraft最適化MOD",
     "url": "https://github.com/noahdunnagan/mcopt",
     "summary": "Apple Silicon搭載Macで、Minecraftの描画処理をMetalに置き換え、動作の高速化を目指す最適化MOD。",
-    "description": "mcoptは、Apple Silicon搭載MacでMinecraft Java Editionをより滑らかに動かすために、OpenGLベースのワールド描画を独自のMetalレンダラーに置き換えるパフォーマンス改善MOD。Apache License 2.0で公開され、macOS 26以降、Java 25、Minecraft 26.3、Fabric Loader 0.19.5以降に対応し、描画APIはMetal 3を利用する。公式READMEの測定では、Mac mini M4（10コアGPU・16 GB）、1920×1080、描画距離16、VSync無効の同一ワールドで、旋回時の通常版156 FPSに対しmcopt 0.3.0-alpha.1は1209〜1211 FPSだったが、すべての環境で同等の向上を保証する数値ではない。最新リリースは0.3.0-alpha.2のAlpha版で、バグに備えて導入前のワールドのバックアップが推奨され、Sodiumは不要かつ併用不可で、Sodium依存のMODやOpenGLを直接呼ぶMODにも互換性の制約がある。",
+    "description": "mcoptは、Apple Silicon搭載Mac向けのMinecraft Java Edition最適化MOD。OpenGLベースのワールド描画を独自のMetalレンダラーに置き換え、より滑らかな動作を目指す。\n対応環境：macOS 26以降、Apple Silicon、Java 25、Minecraft 26.3、Fabric Loader 0.19.5以降。描画APIはMetal 3\n公式READMEの測定では、Mac mini M4（10コアGPU・16 GB）、1920×1080、描画距離16、VSync無効の同一ワールドで、旋回時の通常版156 FPSに対しmcopt 0.3.0-alpha.1は1209〜1211 FPSだったが、すべての環境で同等の向上を保証する数値ではない。\n最新リリースは0.3.0-alpha.2のAlpha版で、バグに備えて導入前のワールドのバックアップが推奨される。Sodiumは不要かつ併用不可で、Sodium依存のMODやOpenGLを直接呼ぶMODにも互換性の制約がある。Apache License 2.0で公開されている。",
+    "environment": [
+      {
+        "label": "Mac",
+        "value": "macOS 26以降／Apple Silicon"
+      },
+      {
+        "label": "ゲーム・実行環境",
+        "value": "Minecraft 26.3／Java 25／Fabric Loader 0.19.5以降"
+      },
+      {
+        "label": "描画API",
+        "value": "Metal 3"
+      }
+    ],
     "category": "ゲーム",
     "tags": [
       "パフォーマンス最適化",
@@ -65,7 +89,21 @@ window.PROJECTS = [
     "name": "PluginKits — macOS拡張機能管理ツール",
     "url": "https://github.com/Oil3/PluginKits",
     "summary": "macOSにインストールされた拡張機能を一覧表示・管理し、Quick Lookの競合や動作不良の解消を支援するツール。",
-    "description": "PluginKitsは、macOSのアプリ・システムに登録された.appex形式の拡張機能を管理するSwift製ツールで、公式READMEはオープンソースと説明しているが具体的なライセンス名は未確認。macOS 13 Ventura以降のApple Silicon・Intel Macに対応し、macOS 14未満ではVentura用の配布版を選ぶ必要があり、公式説明ではシステム権限を要求せずアプリの外向きネットワーク通信を無効化している。拡張機能の識別子・保存場所などを確認して個別に有効化・無効化や登録・解除を行い、Quick Lookで同じファイル形式を扱う拡張機能の競合を検出して使用するものを選べるため、プレビュー不良の原因調査や不要な拡張機能の整理に使える。登録解除の取り消しはアプリ終了までで、操作は拡張機能の動作に影響し、自動整理では重複版の無効化・登録解除・一時バックアップ・ゴミ箱への移動に加えて残す拡張機能の/Applicationsへの移動と再登録も行うため、対象を確認して操作する必要がある。",
+    "description": "PluginKitsは、macOSに登録された.appex形式の拡張機能を一覧表示・管理するツール。Quick Lookの競合を検出し、同じファイル形式に使う拡張機能を選択できる。\n拡張機能の識別子・保存場所を確認し、個別に有効化・無効化や登録・解除を行えるため、プレビュー不良の原因調査や不要な拡張機能の整理に使える。\n対応環境：macOS 13 Ventura以降、Apple Silicon・Intel Mac。macOS 14未満はGitHub ReleasesのVentura用配布版を選択\nSwift製で、公式説明ではシステム権限を要求せず、アプリの外向きネットワーク通信を無効化している。公式READMEはオープンソースと説明しているが、具体的なライセンス名は未確認。\n登録解除の取り消しはアプリ終了までで、操作は拡張機能の動作に影響する。自動整理では重複版の無効化・登録解除・一時バックアップ・ゴミ箱への移動に加えて、残す拡張機能の/Applicationsへの移動と再登録も行うため、対象を確認して操作する必要がある。",
+    "environment": [
+      {
+        "label": "OS",
+        "value": "macOS 13 Ventura以降"
+      },
+      {
+        "label": "CPU",
+        "value": "Apple Silicon・Intel"
+      },
+      {
+        "label": "配布版",
+        "value": "macOS 14未満はGitHub ReleasesのVentura用配布版を選択"
+      }
+    ],
     "category": "macOS",
     "tags": [
       "システム管理",
@@ -84,6 +122,52 @@ window.PROJECTS = [
       {
         "label": "公式リリース",
         "url": "https://github.com/Oil3/PluginKits/releases/tag/pluginkit-v1.0"
+      }
+    ]
+  },
+  {
+    "name": "Insomnia — Macの長時間処理・省電力管理ツール",
+    "url": "https://github.com/krishhgg/Insomnia",
+    "summary": "AIエージェントの長時間実行に向けて、不要なアプリの一時停止や省電力制御を行い、Macのバックグラウンド処理環境を整えるツール。",
+    "description": "Insomniaは、AIエージェントなどの長時間処理に向けて、終了時刻を決めたスリープ防止と省電力制御を行うmacOSのメニューバーアプリ。蓋を閉じた状態での処理継続にも対応する。\nセッション中にMacBookの蓋を閉じると、設定に応じてSlack・Discordなどのアプリを一時停止し、画面・キーボードのバックライト消灯、音声ミュート、低電力モードへの切り替えを行う。ほかのDockアプリを広く停止する設定は初期状態では無効で、設定済みのAIエージェントや保護対象のアプリは除外される。常時アプリを停止する最適化機能ではない。\nバッテリー残量や本体の温度状態に応じて、低電力モードへの移行やセッション終了を制御する。蓋を開くと一時停止したアプリや設定の復元を試み、異常終了後は保存された終了時刻を過ぎると復旧エージェントが回復を試みるが、音声の復元にはアプリの再起動が必要な場合もあり、復旧は保証されない。実験段階のソフトウェアとして提供されている。\nインストール時には管理者権限が必要で、4種類の電源管理コマンドをパスワードなしで実行できる権限がユーザーアカウントに付与される。この権限はInsomnia専用ではなく、同じユーザーで動くほかのプロセスも利用できる。配布アプリはAppleの公証未取得で、初回起動はmacOSにブロックされる。\nSwift製でMITライセンス。蓋を閉じてもMacが動作するため、排熱できる安定した場所で使い、バッグに入れたまま使用しない。\n対応環境：macOS 26以降、Apple Silicon。ソースビルドにはXcode・Swift 6.2以降が必要",
+    "environment": [
+      {
+        "label": "OS・CPU",
+        "value": "macOS 26以降／Apple Silicon（配布版はarm64専用）"
+      },
+      {
+        "label": "動作形式",
+        "value": "メニューバーアプリ。時間指定のスリープ防止・蓋を閉じた状態での動作に対応"
+      },
+      {
+        "label": "導入条件",
+        "value": "インストール時に管理者権限が必要。ソースビルドはXcode・Swift 6.2以降"
+      }
+    ],
+    "category": "macOS",
+    "tags": [
+      "ユーティリティ",
+      "開発支援",
+      "AIエージェント",
+      "省電力",
+      "Swift",
+      "MIT",
+      "Experimental"
+    ],
+    "addedAt": "2026-10-10",
+    "checkedAt": "2026-10-10",
+    "sources": [
+      {
+        "label": "公式README",
+        "url": "https://github.com/krishhgg/Insomnia/blob/main/README.md"
+      },
+      {
+        "label": "公式セキュリティ資料",
+        "url": "https://github.com/krishhgg/Insomnia/blob/main/SECURITY.md"
+      },
+      {
+        "label": "MITライセンス",
+        "url": "https://github.com/krishhgg/Insomnia/blob/main/LICENSE"
       }
     ]
   }
