@@ -6,6 +6,16 @@
   const category = document.querySelector('#category');
   const sort = document.querySelector('#sort');
   const empty = document.querySelector('#empty');
+  const viewButtons = document.querySelectorAll('[data-view]');
+  function setView(view) {
+    cards.classList.toggle('tile-view', view === 'tile');
+    viewButtons.forEach(button => button.setAttribute('aria-pressed', String(button.dataset.view === view)));
+    try { localStorage.setItem('projects-view', view); } catch (_) {}
+  }
+  let savedView = 'list';
+  try { if (localStorage.getItem('projects-view') === 'tile') savedView = 'tile'; } catch (_) {}
+  setView(savedView);
+  viewButtons.forEach(button => button.addEventListener('click', () => setView(button.dataset.view)));
   if (!Array.isArray(data)) {
     document.querySelector('#count').textContent = '一覧データを読み込めなかった。ページを再読み込みして確認。';
     return;
@@ -39,16 +49,27 @@
     filtered.sort(sort.value === 'name' ? (a,b) => a.name.localeCompare(b.name,'ja') : (a,b) => b.addedAt.localeCompare(a.addedAt) || a.name.localeCompare(b.name,'ja'));
     cards.replaceChildren();
     filtered.forEach(p => {
-      const card = element('article', 'card', '');
-      card.append(element('span','category',p.category), element('h2','',p.name), element('span','repo',new URL(p.url).pathname.slice(1)),element('p','summary',p.summary),element('p','description',p.description));
+      const card = element('details', 'project-item', '');
+      const heading = element('summary', 'project-heading', '');
+      const overview = element('div', 'project-overview', '');
+      overview.append(element('span','category',p.category), element('h2','',p.name), element('p','summary',p.summary));
+      heading.append(overview, element('span','project-toggle',''));
+      const body = element('div', 'project-body', '');
+      const description = element('div', 'description', '');
+      // Explicit newlines take priority; older one-line records split at Japanese sentence ends.
+      const paragraphs = p.description.includes('\n')
+        ? p.description.split(/\n+/)
+        : p.description.match(/[^。]+。|[^。]+$/g) || [];
+      paragraphs.filter(text => text.trim()).forEach(text => description.append(element('p', '', text.trim())));
+      body.append(element('span','repo',new URL(p.url).pathname.slice(1)), description);
       const bottom = element('div','card-bottom','');
       bottom.append(link('GitHubで見る ↗',p.url,'external'),element('span','date',`確認 ${p.checkedAt}`));
-      card.append(bottom);
+      body.append(bottom);
       const sources = element('details','','');
       sources.append(element('summary','','説明の出典'));
       const list = element('ul','','');
       p.sources.forEach(source => {const item = element('li','','');item.append(link(source.label,source.url,''));list.append(item);});
-      sources.append(list);card.append(sources);cards.append(card);
+      sources.append(list);body.append(sources);card.append(heading,body);cards.append(card);
     });
     document.querySelector('#count').textContent = `${filtered.length} / ${data.length} PROJECTS`;
     empty.hidden = filtered.length > 0;
