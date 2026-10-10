@@ -226,5 +226,57 @@ window.PROJECTS = [
         "url": "https://github.com/isichan-ai/local-model-diagnosis/blob/main/%E8%A8%BA%E6%96%AD.py"
       }
     ]
+  },
+  {
+    "name": "rirekisho — LaTeX製の履歴書作成テンプレート",
+    "url": "https://github.com/jugesuke/rirekisho",
+    "stars": 49,
+    "starsCheckedAt": "2026-10-10",
+    "summary": "厚生労働省の履歴書様式例をもとにPDFを生成し、Claude Codeとの対話で記入・修正できるLaTeXテンプレート。",
+    "description": "rirekishoは、氏名・住所・学歴・職歴・資格・志望動機などをテキストで記入し、2ページの履歴書PDFを作成するLaTeXテンプレート。開発者は厚生労働省「履歴書様式例（令和3年4月）」に準拠すると説明している。\nClaude Code用の専用スキルを同梱し、対話で不足する情報を確認して、記入・修正、textlintによる文章校閲、PDF生成と出力確認を支援する。記入データはmain.tex、レイアウトはrirekisho.styで管理し、作成日を基準とした満年齢の自動計算や学歴・職歴の2ページ目への送りに対応する。\n応募先に合わせて志望動機などを書き換え、PDFを再生成する用途に使える。欄の高さや行数も変更できるが、変更後は2ページに収まるか確認が必要で、Word文書として直接編集する形式ではない。\n既定の記入枠は学歴・職歴が合計22行、免許・資格が6行で、見出しや空行も行数に含まれる。超過した項目は警告なく省略され、志望動機などの長文も欄外にはみ出す場合があるため、PDFに全内容が収まっているか確認する必要がある。AIの支援は記入・修正・校閲の補助であり、内容の正確性や応募先の指定様式への適合は利用者が確認する。MITライセンスで公開されている。",
+    "environment": [
+      {
+        "label": "必要ソフト",
+        "value": "Docker／Node.js・npmが利用できる環境。初回に依存パッケージとDockerイメージを取得"
+      },
+      {
+        "label": "文書・出力",
+        "value": "LaTeX（TeX）／PDF・既定2ページ。文章校閲はtextlint"
+      },
+      {
+        "label": "AI連携",
+        "value": "Claude Code用スキルを同梱。対話支援にはClaude Code本体と利用環境が必要"
+      }
+    ],
+    "category": "開発ツール",
+    "tags": [
+      "文書作成",
+      "LaTeX",
+      "就職活動",
+      "AIエージェント",
+      "Claude Code",
+      "TeX",
+      "MIT"
+    ],
+    "addedAt": "2026-10-10",
+    "checkedAt": "2026-10-10",
+    "sources": [
+      {
+        "label": "公式README",
+        "url": "https://github.com/jugesuke/rirekisho/blob/main/README.md"
+      },
+      {
+        "label": "公式記入例",
+        "url": "https://github.com/jugesuke/rirekisho/blob/main/example.tex"
+      },
+      {
+        "label": "Claude Code専用スキル",
+        "url": "https://github.com/jugesuke/rirekisho/blob/main/.claude/skills/rirekisho/SKILL.md"
+      },
+      {
+        "label": "MITライセンス",
+        "url": "https://github.com/jugesuke/rirekisho/blob/main/LICENSE"
+      }
+    ]
   }
 ];
